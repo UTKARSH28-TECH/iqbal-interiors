@@ -1,26 +1,97 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Design tokens — see docs/04-design-system.md */
+@theme {
+  /* Color palette */
+  --color-background: #ffffff;
+  --color-foreground: #111111; /* rich black — primary text */
+  --color-muted: #666666; /* slate gray — secondary text */
+  --color-accent: #c8a96a; /* luxury gold — backgrounds, icons, borders, large/dark-bg text */
+  --color-gold-dark: #866a31; /* deep gold for small text on light backgrounds — passes WCAG AA (4.5:1+) */
+  --color-border: #e5e5e5; /* light gray */
+  --color-surface: #f8f8f6; /* warm off-white — section background */
+  --color-whatsapp: #25d366;
+
+  /* Typography (variables provided by next/font in app/layout.tsx) */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+
+  /* Border radius */
+  --radius-input: 12px;
+  --radius-button: 14px;
+  --radius-card: 20px;
+  --radius-image: 20px;
+  --radius-modal: 24px;
+
+  /* Layout widths */
+  --container-max: 1280px;
+  --container-content: 1200px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+  }
+
+  body {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings default to the serif display face; override with `font-sans` where needed. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: #ffffff;
+  }
+
+  /* Visible focus for keyboard users (components may refine this). */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Gentle Ken Burns zoom for the hero slider. */
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .animate-kenburns {
+    animation: kenburns 8s ease-out both;
+    transform-origin: center;
+    will-change: transform;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 250ms ease-out both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-kenburns,
+  .animate-fade-in {
+    animation: none;
+  }
 }
