@@ -1,19 +1,16 @@
-import fs from "node:fs";
-import path from "node:path";
-import { imageSize } from "image-size";
 import type { GalleryCategory, GalleryImage } from "@/types/gallery";
+import { galleryManifest } from "./gallery-manifest.generated";
 
 /**
- * Build-time gallery reader.
+ * Gallery reader.
  *
- * Categories and images are derived directly from the folder structure under
- * public/images/gallery, so adding images is just "drop file → redeploy" with no
- * code changes (see docs/07-image-management.md). These helpers use the Node
- * filesystem and run only during static generation — never on the client.
+ * The folder structure under public/images/gallery is scanned at build time by
+ * scripts/build-gallery-manifest.mjs and emitted as a bundled data module
+ * (gallery-manifest.generated.ts). These helpers read that in-memory manifest,
+ * so the runtime never touches the filesystem — required for Cloudflare Workers
+ * / OpenNext. Adding images is still "drop file into the folder → rebuild": the
+ * manifest is regenerated on every build (see docs/07-image-management.md).
  */
-
-const GALLERY_ROOT = path.join(process.cwd(), "public", "images", "gallery");
-const IMAGE_PATTERN = /\.(avif|webp|png|jpe?g)$/i;
 
 /** Display titles for known folders; unknown folders fall back to a title-cased slug. */
 const CATEGORY_LABELS: Record<string, string> = {
@@ -38,56 +35,32 @@ function titleFromSlug(slug: string): string {
   );
 }
 
-function readDirSafe(dir: string): string[] {
-  try {
-    return fs.readdirSync(dir);
-  } catch {
-    return [];
-  }
-}
-
-/** Category slugs (folder names) under public/images/gallery, sorted. */
+/** Category slugs (folder names), already sorted in the manifest. */
 export function getGalleryCategorySlugs(): string[] {
-  return readDirSafe(GALLERY_ROOT)
-    .filter((name) => {
-      try {
-        return fs.statSync(path.join(GALLERY_ROOT, name)).isDirectory();
-      } catch {
-        return false;
-      }
-    })
-    .sort();
+  return galleryManifest.map((category) => category.slug);
 }
 
 /**
- * Images for a category, read from its folder and sorted naturally by filename.
- * Pass `withSize: true` to also read intrinsic dimensions (build-time only) —
- * used by the category page to preserve aspect ratios without cropping.
+ * Images for a category, in natural filename order (baked into the manifest).
+ * Pass `withSize: true` to also include intrinsic dimensions — used by the
+ * category page to preserve aspect ratios without cropping.
  */
 export function getCategoryImages(slug: string, withSize = false): GalleryImage[] {
-  const dir = path.join(GALLERY_ROOT, slug);
+  const category = galleryManifest.find((entry) => entry.slug === slug);
+  if (!category) return [];
+
   const title = titleFromSlug(slug);
-  return readDirSafe(dir)
-    .filter((file) => IMAGE_PATTERN.test(file))
-    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
-    .map((file, index) => {
-      const image: GalleryImage = {
-        src: `/images/gallery/${slug}/${encodeURIComponent(file)}`,
-        alt: `${title} interior by Iqbal Interiors — ${index + 1}`,
-      };
-      if (withSize) {
-        try {
-          const { width, height } = imageSize(
-            fs.readFileSync(path.join(dir, file)),
-          );
-          image.width = width;
-          image.height = height;
-        } catch {
-          // Dimensions are optional; the consumer falls back to a default ratio.
-        }
-      }
-      return image;
-    });
+  return category.images.map((image, index) => {
+    const result: GalleryImage = {
+      src: image.src,
+      alt: `${title} interior by Iqbal Interiors — ${index + 1}`,
+    };
+    if (withSize) {
+      result.width = image.width;
+      result.height = image.height;
+    }
+    return result;
+  });
 }
 
 /** A single category with its images resolved. */
@@ -102,7 +75,7 @@ export function getCategory(slug: string): GalleryCategory {
   };
 }
 
-/** All categories. Pass `withImages: false` to skip reading image files (e.g. for index cards). */
+/** All categories. Pass `withImages: false` to skip the image arrays (e.g. for index cards). */
 export function getAllCategories(withImages = true): GalleryCategory[] {
   return getGalleryCategorySlugs().map((slug) => {
     if (withImages) return getCategory(slug);

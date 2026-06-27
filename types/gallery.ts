@@ -10,6 +10,25 @@ export interface GalleryImage {
   height?: number;
 }
 
+/**
+ * Build-time generated gallery manifest. The filesystem under
+ * public/images/gallery is read once at build time and emitted as a bundled
+ * data module, so the runtime (Cloudflare Workers) never touches the filesystem.
+ */
+export interface GalleryManifestImage {
+  /** Public path under /public, URL-encoded for next/image. */
+  src: string;
+  width: number;
+  height: number;
+}
+
+export interface GalleryManifestCategory {
+  slug: string;
+  images: GalleryManifestImage[];
+}
+
+export type GalleryManifest = GalleryManifestCategory[];
+
 /** A gallery category, backed by a folder under public/images/gallery. */
 export interface GalleryCategory {
   /** URL slug, equal to the folder name. */
