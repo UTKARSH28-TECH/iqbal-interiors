@@ -7,6 +7,7 @@ import { WhyChooseUs } from "@/components/sections/WhyChooseUs";
 import { ShowroomPreview } from "@/components/sections/ShowroomPreview";
 import { MeetTheFounders } from "@/components/sections/MeetTheFounders";
 import { GalleryPreview } from "@/components/sections/GalleryPreview";
+import { ProjectWalkthroughs } from "@/components/sections/ProjectWalkthroughs";
 import { ContactCta } from "@/components/sections/ContactCta";
 
 /**
@@ -24,6 +25,7 @@ export default function HomePage() {
       <ShowroomPreview />
       <MeetTheFounders />
       <GalleryPreview />
+      <ProjectWalkthroughs />
       <ContactCta />
     </>
   );

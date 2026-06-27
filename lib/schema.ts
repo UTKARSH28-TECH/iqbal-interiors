@@ -3,8 +3,9 @@ import { founders } from "@/data/founders";
 
 type Json = Record<string, unknown>;
 
-const { phone, mapsUrl } = site.contact;
+const { phones, mapsUrl } = site.contact;
 const { facebook } = site.social;
+const validPhones = phones.filter(Boolean);
 
 /** Documented postal address (no street/geo — not available). */
 const postalAddress: Json = {
@@ -54,7 +55,9 @@ export function localBusinessSchema(): Json {
     areaServed: site.location.city,
     foundingDate: String(site.foundedYear),
     ...(mapsUrl ? { hasMap: mapsUrl } : {}),
-    ...(phone ? { telephone: phone } : {}),
+    ...(validPhones.length
+      ? { telephone: validPhones.length === 1 ? validPhones[0] : validPhones }
+      : {}),
     ...(facebook ? { sameAs: [facebook] } : {}),
   };
 }

@@ -23,10 +23,11 @@ export const site = {
     country: "India",
   },
   // TODO(confirm): email not present in docs.
-  // Typed as `string` (not narrowed to "") so `if (site.contact.phone)` checks
-  // work correctly once real values are filled in, without local workarounds.
+  // Typed as `string`/`string[]` (not narrowed to literals) so emptiness checks
+  // work once real values are filled in, without local workarounds.
   contact: {
-    phone: "+91 9162772469" as string,
+    /** All business phone numbers, shown wherever contact info appears. */
+    phones: ["+91 9162772469", "+91 9608933210"] as string[],
     whatsapp: "+91 9608933210" as string,
     email: "" as string,
     mapsUrl: "https://maps.app.goo.gl/8rpecN2ih11FS3LPA" as string,

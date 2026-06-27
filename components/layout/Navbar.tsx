@@ -8,6 +8,7 @@ import { Container } from "./Container";
 import { Logo } from "./Logo";
 import { MobileDrawer } from "./MobileDrawer";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { FacebookButton } from "@/components/ui/FacebookButton";
 import { primaryNav } from "@/data/navigation";
 import { cn } from "@/lib/utils";
 
@@ -86,6 +87,7 @@ export function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
+            <FacebookButton iconOnly />
             <WhatsAppButton iconOnly className="sm:hidden" />
             <WhatsAppButton className="hidden sm:inline-flex" />
             <button

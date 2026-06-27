@@ -11,8 +11,8 @@ export function whatsappHref(message?: string): string {
   return `https://wa.me/${number}${query}`;
 }
 
-/** `tel:` link to the business phone, or the contact page if no number is set yet. */
-export function callHref(): string {
-  const number = site.contact.phone.replace(/\D/g, "");
+/** `tel:` link for a given phone number, or the contact page if it is empty. */
+export function callHref(phone: string): string {
+  const number = phone.replace(/\D/g, "");
   return number ? `tel:${number}` : "/contact";
 }

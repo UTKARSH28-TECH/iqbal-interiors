@@ -113,6 +113,11 @@ export const galleryManifest: GalleryManifest = [
     "slug": "hall",
     "images": [
       {
+        "src": "/images/gallery/hall/Hall%205.png",
+        "width": 1672,
+        "height": 941
+      },
+      {
         "src": "/images/gallery/hall/Hall-1.png",
         "width": 1086,
         "height": 1448
@@ -186,6 +191,11 @@ export const galleryManifest: GalleryManifest = [
         "src": "/images/gallery/kitchen/kitchen%201.png",
         "width": 1086,
         "height": 1448
+      },
+      {
+        "src": "/images/gallery/kitchen/kitchen%203.png",
+        "width": 854,
+        "height": 1842
       }
     ]
   },
@@ -304,6 +314,11 @@ export const galleryManifest: GalleryManifest = [
       },
       {
         "src": "/images/gallery/tv-unit-design/tv4.png",
+        "width": 1086,
+        "height": 1448
+      },
+      {
+        "src": "/images/gallery/tv-unit-design/tv5.png",
         "width": 1086,
         "height": 1448
       }

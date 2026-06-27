@@ -4,7 +4,7 @@ import { Container } from "@/components/layout/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FacebookIcon } from "@/components/ui/FacebookIcon";
 import { site } from "@/data/site";
-import { whatsappHref } from "@/lib/contact";
+import { callHref, whatsappHref } from "@/lib/contact";
 
 interface InfoItem {
   icon: ReactNode;
@@ -20,7 +20,7 @@ interface InfoItem {
  * nothing is fabricated. Business hours are omitted (not documented).
  */
 export function ContactInformation() {
-  const { phone, whatsapp, mapsUrl } = site.contact;
+  const { phones, whatsapp, mapsUrl } = site.contact;
   const { facebook } = site.social;
   const { area, city, state, country } = site.location;
 
@@ -34,12 +34,13 @@ export function ContactInformation() {
     },
   ];
 
-  if (phone) {
+  for (const phone of phones) {
+    if (!phone) continue;
     items.push({
       icon: <Phone className="size-5" aria-hidden />,
       label: "Phone",
       value: phone,
-      href: `tel:${phone.replace(/\D/g, "")}`,
+      href: callHref(phone),
     });
   }
   if (whatsapp) {

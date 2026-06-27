@@ -29,8 +29,9 @@ export function getContactLinks(): ContactLink[] {
     },
   ];
 
-  if (site.contact.phone) {
-    links.push({ icon: Phone, label: site.contact.phone, href: callHref() });
+  for (const phone of site.contact.phones) {
+    if (!phone) continue;
+    links.push({ icon: Phone, label: phone, href: callHref(phone) });
   }
   if (site.contact.whatsapp) {
     links.push({

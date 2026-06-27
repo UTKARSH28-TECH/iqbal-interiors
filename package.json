@@ -4,14 +4,16 @@
   "private": true,
   "scripts": {
     "gallery:manifest": "node scripts/build-gallery-manifest.mjs",
-    "predev": "node scripts/build-gallery-manifest.mjs",
+    "videos:manifest": "node scripts/build-video-manifest.mjs",
+    "manifests": "npm run gallery:manifest && npm run videos:manifest",
+    "predev": "npm run manifests",
     "dev": "next dev",
-    "prebuild": "node scripts/build-gallery-manifest.mjs",
+    "prebuild": "npm run manifests",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "preview": "npm run gallery:manifest && opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "npm run gallery:manifest && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "npm run manifests && opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "npm run manifests && opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
