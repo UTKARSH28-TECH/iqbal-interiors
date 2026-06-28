@@ -54,7 +54,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     .filter((other) => other !== slug)
     .slice(0, 4)
     .map((other) => getCategory(other));
-  const photoLabel = `${category.count} ${category.count === 1 ? "photo" : "photos"}`;
+
+  const photoLabel = `${category.count} ${
+    category.count === 1 ? "photo" : "photos"
+  }`;
 
   return (
     <>
@@ -103,11 +106,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </Container>
       </section>
 
-      {/* Related categories */}
       {related.length > 0 && (
         <section className="border-t border-border py-[70px] sm:py-[90px] lg:py-[120px]">
           <Container>
-            <SectionHeading label="Keep Exploring" title="Related Categories" />
+            <SectionHeading
+              label="Keep Exploring"
+              title="Related Categories"
+            />
             <ul className="mt-12 grid grid-cols-2 gap-6 lg:grid-cols-4">
               {related.map((relatedCategory) => (
                 <li key={relatedCategory.slug}>
