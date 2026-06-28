@@ -5,7 +5,7 @@ export const heroContent: HeroContent = {
   eyebrow: "Interior Design • Showroom • Execution",
   title: "Designing Spaces, Defining Lifestyles",
   subtitle:
-    "Premium interiors, false ceilings, modular kitchens and complete execution — handcrafted in Giridih since 2011.",
+    "Premium interiors, false ceilings, modular kitchens and complete execution — handcrafted in Jamua Giridih since 2011.",
   primaryCta: { label: "Explore Gallery", href: "/gallery" },
   interval: 6,
   images: [
